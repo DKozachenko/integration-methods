@@ -64,7 +64,7 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/topLimitInput"
+                android:id="@+id/leftLimitInput"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -82,7 +82,7 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/bottomLimitInput"
+                android:id="@+id/rightLimitInput"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -116,7 +116,7 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/topLimitInput2"
+                android:id="@+id/roundNumberInput"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -140,14 +140,14 @@
                 android:layout_height="wrap_content"
                 android:minWidth="225dp"
                 android:text="Метод прямоугольников"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:onClick="rectangleButtonClick"/>
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/rectangleOutput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="fdgd"
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </LinearLayout>
