@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText roundNumberInput;
     private TextView rectangleOutput;
     private TextView trapezoidOutput;
+    private TextView simpsonOutput;
 
     private double roundToN(double value, int digits) {
         BigDecimal bd = new BigDecimal(Double.toString(value));
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             sum += roundedDbl;
         }
 
+        //первое значение функ
         Context context  = Context.enter();
         context.setOptimizationLevel(-1);
         Scriptable scriptable = context.initStandardObjects();
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         Double roundedDbl = roundToN(resultDbl, roundNumber);
         System.out.println("1 " + roundedDbl);
 
+        //последнее значение функ
         context  = Context.enter();
         context.setOptimizationLevel(-1);
         scriptable = context.initStandardObjects();
@@ -97,6 +100,66 @@ public class MainActivity extends AppCompatActivity {
         sum += (roundedDbl + roundedDbl2) / 2;
 
         return sum * step;
+    }
+
+    private Double calculateBySimpsonMethod(String function, Double leftLimit, Double rightLimit, Integer roundNumber) {
+        Integer segments = 2;
+        Integer nodes = segments + 1;
+        Double step = (rightLimit - leftLimit) / segments;
+
+        Double sum = 0.0;
+        Double sumEven = 0.0;
+        Double sumOdd = 0.0;
+
+        for (int i = 1; i < nodes - 1; ++i) {
+            Context context  = Context.enter();
+            context.setOptimizationLevel(-1);
+            Scriptable scriptable = context.initStandardObjects();
+
+            Double x = leftLimit + i * step;
+            System.out.println(x);
+            String currentExpression = "const x = " + x + "; " + function;
+            String result =  context.evaluateString(scriptable, currentExpression,"Javascript",1,null).toString();
+            Double resultDbl = Double.parseDouble(result);
+            Double roundedDbl = roundToN(resultDbl, roundNumber);
+            System.out.println(roundedDbl);
+
+            if (i % 2 == 0) {
+                sumEven += roundedDbl;
+            } else {
+                sumOdd += roundedDbl;
+            }
+        }
+
+        //первое значение функ
+        Context context  = Context.enter();
+        context.setOptimizationLevel(-1);
+        Scriptable scriptable = context.initStandardObjects();
+
+        Double x = leftLimit + 0 * step;
+        String currentExpression = "const x = " + x + "; " + function;
+        String result =  context.evaluateString(scriptable, currentExpression,"Javascript",1,null).toString();
+        Double resultDbl = Double.parseDouble(result);
+        Double roundedDbl = roundToN(resultDbl, roundNumber);
+        System.out.println("1 " + roundedDbl);
+        sum += roundedDbl;
+
+        //последнее значение функ
+        context  = Context.enter();
+        context.setOptimizationLevel(-1);
+        scriptable = context.initStandardObjects();
+
+        x = leftLimit + (nodes - 1) * step;
+        currentExpression = "const x = " + x + "; " + function;
+        result =  context.evaluateString(scriptable, currentExpression,"Javascript",1,null).toString();
+        resultDbl = Double.parseDouble(result);
+        roundedDbl = roundToN(resultDbl, roundNumber);
+        System.out.println("2 " + roundedDbl);
+        sum += roundedDbl;
+
+        sum += sumEven * 2 + sumOdd * 4;
+
+        return sum * (step / 3);
     }
 
     private Boolean isDataValid() {
@@ -118,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         this.roundNumberInput = findViewById(R.id.roundNumberInput);
         this.rectangleOutput = findViewById(R.id.rectangleOutput);
         this.trapezoidOutput = findViewById(R.id.trapezoidOuput);
+        this.simpsonOutput = findViewById(R.id.simpsonOutput);
     }
 
     public void rectangleButtonClick(View view) {
@@ -145,6 +209,21 @@ public class MainActivity extends AppCompatActivity {
 
             Double integral = this.calculateByTrapezoidMethod("1 / Math.log(x)", leftLimit, rightLimit, roundNumber);
             this.trapezoidOutput.setText(integral.toString());
+        }
+    }
+
+    public void simpsonButtonClick(View view) {
+        if (this.isDataValid()) {
+            String initialFunction = this.functionInput.getText().toString();
+            String function = this.editInitialFunction(initialFunction);
+            Double leftLimit = Double.parseDouble(this.leftLimitInput.getText().toString());
+            Double rightLimit = Double.parseDouble(this.rightLimitInput.getText().toString());
+            Integer initialRoundNumber = this.roundNumberInput.getText().toString().split("\\.")[1].length();
+            Integer roundNumber = initialRoundNumber + 2;
+
+            Double integral = this.calculateBySimpsonMethod("Math.sqrt(1 + 2 * Math.pow(x, 2) - Math.pow(x, 3))", 1.2, 2.0, 5);
+            System.out.println(integral);
+            this.simpsonOutput.setText(integral.toString());
         }
     }
 }

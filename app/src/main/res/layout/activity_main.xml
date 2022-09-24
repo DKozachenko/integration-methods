@@ -173,7 +173,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="fdgd"
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -191,14 +190,14 @@
                 android:layout_height="wrap_content"
                 android:minWidth="225dp"
                 android:text="Метод Симпсона"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:onClick="simpsonButtonClick"/>
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/simpsonOutput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="fdgd"
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </LinearLayout>
