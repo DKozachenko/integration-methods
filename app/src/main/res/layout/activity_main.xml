@@ -70,7 +70,7 @@
                 android:layout_marginLeft="10dp"
                 android:ems="10"
                 android:inputType="number|textPersonName"
-                android:text="a"
+                android:text="0"
                 android:textAlignment="center" />
 
             <TextView
@@ -88,7 +88,7 @@
                 android:layout_marginLeft="10dp"
                 android:ems="10"
                 android:inputType="number|textPersonName"
-                android:text="b"
+                android:text="0"
                 android:textAlignment="center" />
 
             <TextView
