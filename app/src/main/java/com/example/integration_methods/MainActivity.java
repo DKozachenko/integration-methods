@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView rectangleOutput;
     private TextView trapezoidOutput;
     private TextView simpsonOutput;
+    private Integer START_SEGMENT_VALUE = 2;
 
     private double roundToN(double value, int digits) {
         BigDecimal bd = new BigDecimal(Double.toString(value));
@@ -58,8 +59,7 @@ public class MainActivity extends AppCompatActivity {
         return Double.parseDouble(result);
     }
 
-    private Double calculateByRectangleMethod(Parameters parameters) {
-        Integer segments = 5;
+    private Double makeRectangleMethodIteration(Parameters parameters, Integer segments) {
         Double step = (parameters.getRightLimit() - parameters.getLeftLimit()) / segments;
 
         Double sum = 0.0;
@@ -75,8 +75,21 @@ public class MainActivity extends AppCompatActivity {
         return this.roundToN(sum * step, 5);
     }
 
-    private Double calculateByTrapezoidMethod(Parameters parameters) {
-        Integer segments = 5;
+    private Double calculateByRectangleMethod(Parameters parameters) {
+        Double lastApproximation = Double.MAX_VALUE;
+        Integer segments = this.START_SEGMENT_VALUE;
+        Double currentApproximation = this.makeRectangleMethodIteration(parameters, segments);
+
+        while (Math.abs(lastApproximation - currentApproximation) >= parameters.getAccuracy()) {
+            lastApproximation = currentApproximation;
+            segments *= 2;
+            currentApproximation = this.makeRectangleMethodIteration(parameters, segments);
+        }
+
+        return currentApproximation;
+    }
+
+    private Double makeTrapezoidMethodIteration(Parameters parameters, Integer segments) {
         Integer nodes = segments + 1;
         Double step = (parameters.getRightLimit() - parameters.getLeftLimit()) / segments;
 
@@ -104,8 +117,21 @@ public class MainActivity extends AppCompatActivity {
         return this.roundToN(sum * step, 5);
     }
 
-    private Double calculateBySimpsonMethod(Parameters parameters) {
-        Integer segments = 2;
+    private Double calculateByTrapezoidMethod(Parameters parameters) {
+        Double lastApproximation = Double.MAX_VALUE;
+        Integer segments = this.START_SEGMENT_VALUE;
+        Double currentApproximation = this.makeTrapezoidMethodIteration(parameters, segments);
+
+        while (Math.abs(lastApproximation - currentApproximation) >= parameters.getAccuracy()) {
+            lastApproximation = currentApproximation;
+            segments *= 2;
+            currentApproximation = this.makeTrapezoidMethodIteration(parameters, segments);
+        }
+
+        return currentApproximation;
+    }
+
+    private Double makeSimpsonMethodIteration(Parameters parameters, Integer segments) {
         Integer nodes = segments + 1;
         Double step = (parameters.getRightLimit() - parameters.getLeftLimit()) / segments;
 
@@ -144,15 +170,30 @@ public class MainActivity extends AppCompatActivity {
         return this.roundToN(sum * (step / 3), 5);
     }
 
+    private Double calculateBySimpsonMethod(Parameters parameters) {
+        Double lastApproximation = Double.MAX_VALUE;
+        Integer segments = this.START_SEGMENT_VALUE;
+        Double currentApproximation = this.makeSimpsonMethodIteration(parameters, segments);
+
+        while (Math.abs(lastApproximation - currentApproximation) >= parameters.getAccuracy()) {
+            lastApproximation = currentApproximation;
+            segments *= 2;
+            currentApproximation = this.makeSimpsonMethodIteration(parameters, segments);
+        }
+
+        return currentApproximation;
+    }
+
     private Parameters getParameters() {
         String initialFunction = this.functionInput.getText().toString();
         String function = this.editInitialFunction(initialFunction);
         Double leftLimit = Double.parseDouble(this.leftLimitInput.getText().toString());
         Double rightLimit = Double.parseDouble(this.rightLimitInput.getText().toString());
+        Double accuracy = Double.parseDouble(this.roundNumberInput.getText().toString());
         Integer initialRoundNumber = this.roundNumberInput.getText().toString().split("\\.")[1].length();
         Integer roundNumber = initialRoundNumber + 2;
 
-        return new Parameters(function, leftLimit, rightLimit, roundNumber);
+        return new Parameters(function, leftLimit, rightLimit, roundNumber, accuracy);
     }
 
     private void showMessage(String message) {

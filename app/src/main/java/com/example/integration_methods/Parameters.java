@@ -5,12 +5,14 @@ public class Parameters {
     private Double leftLimit;
     private Double rightLimit;
     private Integer roundNumber;
+    private Double accuracy;
 
-    public Parameters(String function, Double leftLimit, Double rightLimit, Integer roundNumber) {
+    public Parameters(String function, Double leftLimit, Double rightLimit, Integer roundNumber, Double accuracy) {
         this.function = function;
         this.leftLimit = leftLimit;
         this.rightLimit = rightLimit;
         this.roundNumber = roundNumber;
+        this.accuracy = accuracy;
     }
 
     public String getFunction() {
@@ -27,5 +29,9 @@ public class Parameters {
 
     public Integer getRoundNumber() {
         return roundNumber;
+    }
+
+    public Double getAccuracy() {
+        return accuracy;
     }
 }
