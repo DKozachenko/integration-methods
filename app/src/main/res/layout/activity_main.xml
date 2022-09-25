@@ -127,6 +127,14 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/supportedFunctions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Поддерживаемые функции:\nln(x) - нат. логарифм; lg(x) - дес. логарифм\nsqrt(x) - корень квадратный; sin(x) - синус\ncos(x) - косинус; |x| - модуль\n(a)^(b) - a в степени b (можно без скобок)\n"
+            android:textSize="14sp" />
+
         <LinearLayout
             android:id="@+id/rectangleMethod"
             android:layout_width="match_parent"
